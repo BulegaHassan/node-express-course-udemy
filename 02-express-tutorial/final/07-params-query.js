@@ -1,9 +1,9 @@
 const express = require('express')
 const app = express()
-const { products } = require('./data')
+const { products } = require('../data')
 
 app.get('/', (req, res) => {
-  res.send('<h1> Home Page</h1><a href="/api/products">products</a>')
+  res.send('<h1> Home Page</h1><a href="/api/products">products</a><p><a href="/api/v1/query">searchName or limitResults</a></p>')
 })
 app.get('/api/products', (req, res) => {
   const newProducts = products.map((product) => {
@@ -51,6 +51,7 @@ app.get('/api/v1/query', (req, res) => {
     return res.status(200).json({ sucess: true, data: [] })
   }
   res.status(200).json(sortedProducts)
+  // in the url for /api/v1/query use ? after the url eg (/api/v1/querysearch=_searchterm) .To concatenate use & eg. (search=_searchterm&limit=_number)
 })
 
 app.listen(5000, () => {

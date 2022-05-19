@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
-let { people } = require('./data')
+let { people } = require('../data')
 
 // static assets
-app.use(express.static('./methods-public'))
+app.use(express.static('../methods-public')) // this middleware renders the index/root of the methods-public folder
+// when the form is filled is filled, it takes you to the /login page
 // parse form data
 app.use(express.urlencoded({ extended: false }))
 // parse json
@@ -12,7 +13,15 @@ app.use(express.json())
 app.get('/api/people', (req, res) => {
   res.status(200).json({ success: true, data: people })
 })
+//  this /login is refered to from the form of index.html of the methods-public folder (form with action="/login" and mehtod="post")
+app.post('/login', (req, res) => {
+  const { name } = req.body
+  if (name) {
+    return res.status(200).send(`Welcome ${name}`)
+  }
 
+  res.status(401).send('Please Provide Credentials')
+})
 app.post('/api/people', (req, res) => {
   const { name } = req.body
   if (!name) {
@@ -23,7 +32,7 @@ app.post('/api/people', (req, res) => {
   res.status(201).json({ success: true, person: name })
 })
 
-app.post('/api/postman/people', (req, res) => {
+app.post('/api/people/postman', (req, res) => {
   const { name } = req.body
   if (!name) {
     return res
@@ -33,14 +42,7 @@ app.post('/api/postman/people', (req, res) => {
   res.status(201).json({ success: true, data: [...people, name] })
 })
 
-app.post('/login', (req, res) => {
-  const { name } = req.body
-  if (name) {
-    return res.status(200).send(`Welcome ${name}`)
-  }
 
-  res.status(401).send('Please Provide Credentials')
-})
 
 app.put('/api/people/:id', (req, res) => {
   const { id } = req.params
