@@ -1,6 +1,6 @@
 const path = require('path')
 
-console.log(path.sep)
+console.log(path.sep) // platform specific separator
 
 const filePath = path.join('/content/', 'subfolder', 'test.txt')
 console.log(filePath)
